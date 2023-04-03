@@ -34,7 +34,7 @@ export class Task {
   @Field()
   name: string;
 
-  @ManyToOne(() => Board, (board) => board.tasks)
+  @ManyToOne(() => Board, (board) => board.tasks, { onDelete: 'CASCADE' })
   board: Board;
 
   @OneToMany(() => TimePeriod, (timePeriod) => timePeriod.task)

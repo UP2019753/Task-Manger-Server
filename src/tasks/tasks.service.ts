@@ -23,6 +23,10 @@ export class TasksService {
     return newTask;
   }
 
+  async delete(taskId: number): Promise<void> {
+    await this.tasksRepository.delete(taskId);
+  }
+
   async stop(taskId: number): Promise<Task> {
     const task = await this.findOneById(taskId);
     task.timePeriods

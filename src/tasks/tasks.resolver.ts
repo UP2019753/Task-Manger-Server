@@ -41,6 +41,12 @@ export class TasksResolver {
     return this.tasksService.changeStatus(id, status);
   }
 
+  @Mutation((returns) => Boolean)
+  async deleteTask(@Args({ name: 'taskID', type: () => Int }) id: number) {
+    await this.tasksService.delete(id);
+    return true;
+  }
+
   @ResolveField((type) => RealTimeDuration)
   async totalTime(@Parent() task: Task): Promise<RealTimeDuration> {
     return this.tasksService.calcRealTimeDuration(task.id);
