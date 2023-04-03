@@ -3,16 +3,16 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BoardsModule } from './boards/boards.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Board } from './boards/board.model';
 import { Task } from './tasks/task.model';
-import { DateTimeScalar } from './scalars/dateTime';
+import { DateTimeScalar } from './scalars/dateTimeScalar';
+import { DurationScalar } from './scalars/durationScalar';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
-      resolvers: { DateTime: DateTimeScalar },
+      resolvers: { DateTime: DateTimeScalar, Duration: DurationScalar },
     }),
     TypeOrmModule.forRoot({
       type: 'sqlite',

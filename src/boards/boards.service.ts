@@ -11,10 +11,12 @@ export class BoardsService {
   ) {}
 
   async findOneById(id: number): Promise<Board> {
-    return await this.boardsRepository.findOne({
-      where: { id },
-      relations: ['tasks'],
-    });
+    return await this.boardsRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.tasks', 'tasks')
+      .leftJoinAndSelect('tasks.timePeriods', 'timePeriods')
+      .where('board.id = :id', { id: id })
+      .getOne();
   }
   async create(name: string): Promise<Board> {
     const newBoard = this.boardsRepository.create();

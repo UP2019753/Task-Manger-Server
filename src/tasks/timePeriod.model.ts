@@ -1,7 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { DateTime } from 'luxon';
 import { Board } from 'src/boards/board.model';
-import { DateTimeScalar, dateTimeTransformer } from 'src/scalars/dateTime';
+import {
+  DateTimeScalar,
+  dateTimeTransformer,
+} from 'src/scalars/dateTimeScalar';
 import {
   Column,
   Entity,
@@ -11,15 +14,15 @@ import {
 } from 'typeorm';
 import { Task } from './task.model';
 
-// Activity created for  start/stop task
+// Time period created for start/stop task
 @Entity()
 @ObjectType()
-export class Activity {
+export class TimePeriod {
   @PrimaryGeneratedColumn()
   @Field((type) => Int)
   id: number;
 
-  @ManyToOne(() => Task, (task) => task.activities)
+  @ManyToOne(() => Task, (task) => task.timePeriods)
   @Field()
   task: Task;
 
@@ -29,5 +32,5 @@ export class Activity {
 
   @Column({ type: 'text', transformer: dateTimeTransformer, nullable: true })
   @Field((type) => DateTimeScalar, { nullable: true })
-  stopTime: DateTime | null;
+  stopTime: DateTime | null | undefined;
 }

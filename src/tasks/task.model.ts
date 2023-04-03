@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Board } from 'src/boards/board.model';
 import {
   Column,
@@ -10,7 +10,18 @@ import {
   PrimaryGeneratedColumn,
   JoinTable,
 } from 'typeorm';
-import { Activity } from './activity.model';
+import { RealTimeDuration } from './realTimeDuration.model';
+import { TimePeriod } from './timePeriod.model';
+
+export enum TaskProgress {
+  NOTSTARTED,
+  INPROGRESS,
+  DONE,
+}
+
+registerEnumType(TaskProgress, {
+  name: 'TaskProgress',
+});
 
 @Entity()
 @ObjectType()
@@ -26,7 +37,15 @@ export class Task {
   @ManyToOne(() => Board, (board) => board.tasks)
   board: Board;
 
-  @OneToMany(() => Activity, (activity) => activity.task)
-  @Field((type) => [Activity])
-  activities: Activity[];
+  @OneToMany(() => TimePeriod, (timePeriod) => timePeriod.task)
+  @Field((type) => [TimePeriod])
+  timePeriods: TimePeriod[];
+
+  @Column({
+    type: 'simple-enum',
+    enum: TaskProgress,
+    default: TaskProgress.NOTSTARTED,
+  })
+  @Field((type) => TaskProgress)
+  status: TaskProgress;
 }
