@@ -47,6 +47,14 @@ export class TasksResolver {
     return true;
   }
 
+  @Mutation((returns) => Task)
+  async setTaskName(
+    @Args({ name: 'taskId', type: () => Int }) id: number,
+    @Args({ name: 'name', type: () => String }) name: string,
+  ) {
+    return this.tasksService.changeTaskName(id, name);
+  }
+
   @ResolveField((type) => RealTimeDuration)
   async totalTime(@Parent() task: Task): Promise<RealTimeDuration> {
     return this.tasksService.calcRealTimeDuration(task.id);

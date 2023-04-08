@@ -46,6 +46,13 @@ export class TasksService {
     return task;
   }
 
+  async changeTaskName(taskId: number, newTaskName: string): Promise<Task> {
+    const task = await this.findOneById(taskId);
+    task.name = newTaskName;
+    await this.tasksRepository.save(task);
+    return task;
+  }
+
   async findOneById(id: number): Promise<Task> {
     return await this.tasksRepository.findOne({
       where: { id },
