@@ -7,7 +7,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { Task } from 'src/tasks/task.model';
+import { Task, TaskProgress } from 'src/tasks/task.model';
 import { TasksService } from 'src/tasks/tasks.service';
 import { Board } from './board.model';
 import { BoardsService } from './boards.service';
@@ -33,9 +33,11 @@ export class BoardsResolver {
   async createTask(
     @Args({ name: 'boardId', type: () => Int }) boardId: number,
     @Args({ name: 'name', type: () => String }) name: string,
+    @Args({ name: 'taskProgress', type: () => TaskProgress, nullable: true })
+    taskProgress?: TaskProgress,
   ) {
     const board = await this.getBoardById(boardId);
-    return this.tasksService.create(board, name);
+    return this.tasksService.create(board, name, taskProgress);
   }
 
   // @ResolveField()

@@ -15,10 +15,17 @@ export class TasksService {
     private timePeriodsService: TimePeriodsService,
   ) {}
 
-  async create(board: Board, name: string): Promise<Task> {
+  async create(
+    board: Board,
+    name: string,
+    taskProgress?: TaskProgress,
+  ): Promise<Task> {
     const newTask = this.tasksRepository.create();
     newTask.name = name;
     newTask.board = board;
+    if (taskProgress) {
+      newTask.status = taskProgress;
+    }
     await this.tasksRepository.save(newTask);
     return newTask;
   }
