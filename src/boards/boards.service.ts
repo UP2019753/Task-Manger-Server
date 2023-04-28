@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Board } from './board.model';
 
 @Injectable()
@@ -18,10 +18,22 @@ export class BoardsService {
       .where('board.id = :id', { id: id })
       .getOne();
   }
+
+  async findByIds(ids: number[]): Promise<Board[]> {
+    return await this.boardsRepository.findBy({ id: In(ids) });
+  }
+
   async create(name: string): Promise<Board> {
     const newBoard = this.boardsRepository.create();
     newBoard.name = name;
     await this.boardsRepository.save(newBoard);
     return newBoard;
+  }
+
+  async changeBoardName(boardId: number, newBoardName: string): Promise<Board> {
+    const board = await this.findOneById(boardId);
+    board.name = newBoardName;
+    await this.boardsRepository.save(board);
+    return board;
   }
 }

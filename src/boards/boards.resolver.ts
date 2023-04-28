@@ -24,9 +24,22 @@ export class BoardsResolver {
     return this.boardsService.findOneById(id);
   }
 
+  @Query((returns) => [Board])
+  async getBoardsByIds(@Args('ids', { type: () => [Int] }) ids: number[]) {
+    return this.boardsService.findByIds(ids);
+  }
+
   @Mutation((returns) => Board)
   async createBoard(@Args({ name: 'name', type: () => String }) name: string) {
     return this.boardsService.create(name);
+  }
+
+  @Mutation((returns) => Board)
+  async setBoardName(
+    @Args({ name: 'boardId', type: () => Int }) id: number,
+    @Args({ name: 'name', type: () => String }) name: string,
+  ) {
+    return this.boardsService.changeBoardName(id, name);
   }
 
   @Mutation((returns) => Task)

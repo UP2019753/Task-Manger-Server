@@ -22,7 +22,9 @@ export class TimePeriod {
   @Field((type) => Int)
   id: number;
 
-  @ManyToOne(() => Task, (task) => task.timePeriods)
+  @ManyToOne(() => Task, (task) => task.timePeriods, {
+    onDelete: 'CASCADE',
+  })
   @Field()
   task: Task;
 
